@@ -2,10 +2,13 @@ const functions = require('firebase-functions');
 const express = require('express');
 const app = express();
 
-// Handle GET requests to root
+// Your route
 app.get('/', (req, res) => {
-  res.send('Hello World from Express running inside Firebase Functions!');
+  res.send('Hello World');
 });
 
-// Export your Express app as a Firebase HTTP function
+// Export Express app for testing
+module.exports = app;
+
+// Export Firebase Function for deployment
 exports.app = functions.https.onRequest(app);
