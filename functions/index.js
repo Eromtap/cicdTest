@@ -1,14 +1,24 @@
-const functions = require('firebase-functions');
+const { onRequest } = require('firebase-functions/v2/https');
 const express = require('express');
+
 const app = express();
 
-// Your route
+// Define simple route
 app.get('/', (req, res) => {
-  res.send('Hello World');
+  res.status(200).send('Hello World');
 });
 
-// Export Express app for testing
-module.exports = app;
+// THIS IS THE MOST IMPORTANT PART
+exports.app = onRequest(app);
 
-// Export Firebase Function for deployment
-exports.app = functions.https.onRequest(app);
+// Optional: Run express server locally for testing
+if (require.main === module) {
+  const PORT = process.env.PORT || 3000;
+  app.listen(PORT, () => {
+    console.log(`Listening locally on port ${PORT}`);
+  });
+}
+
+
+// Add this for testing (Supertest needs raw Express app)
+module.exports = { app, expressApp: app };
